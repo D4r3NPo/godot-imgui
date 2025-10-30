@@ -1,4 +1,4 @@
-#include "imgui_godot.h"
+#include "godot_imgui.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>

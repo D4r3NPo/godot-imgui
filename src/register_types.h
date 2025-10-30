@@ -1,7 +1,7 @@
-#ifndef EXAMPLE_REGISTER_TYPES_H
-#define EXAMPLE_REGISTER_TYPES_H
+#ifndef GODOT_IMGUI_REGISTER_TYPES_H
+#define GODOT_IMGUI_REGISTER_TYPES_H
 
 void initialize_godot_imgui();
 void uninitialize_godot_imgui();
 
-#endif // EXAMPLE_REGISTER_TYPES_H
+#endif // GODOT_IMGUI_REGISTER_TYPES_H

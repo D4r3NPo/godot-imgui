@@ -11,7 +11,7 @@
 #include <godot_cpp/classes/image_texture.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
-#include <imgui.h>
+#include <../imgui/imgui.h>
 
 namespace godot {
 
