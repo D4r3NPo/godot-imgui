@@ -112,11 +112,11 @@ jobs:
           # Copy the .gdextension file
           cp demo/bin/godot-imgui.gdextension addons/godot-imgui/
 
-          # Create platform directories and copy binaries
+          # Merge binaries from all artifacts into the addons folder
           for artifact_dir in artifacts/godot-imgui-*; do
-            if [ -d "$artifact_dir" ]; then
-              # Copy all files from the artifact, preserving directory structure
-              cp -r "$artifact_dir"/* addons/godot-imgui/
+            if [ -d "$artifact_dir/bin" ]; then
+              # Copy only the platform directories from bin/, not the bin folder itself
+              cp -r "$artifact_dir"/bin/* addons/godot-imgui/
             fi
           done
 
@@ -124,15 +124,22 @@ jobs:
           echo "Addons folder structure:"
           ls -R addons/
 
+          # Also create a merged bin directory for the raw binaries artifact
+          mkdir -p bin-merged
+          for artifact_dir in artifacts/godot-imgui-*; do
+            if [ -d "$artifact_dir/bin" ]; then
+              cp -r "$artifact_dir"/bin/* bin-merged/
+            fi
+          done
+
       - name: Upload addons artifact
         uses: actions/upload-artifact@v4
         with:
           name: godot-imgui-addon
           path: addons/
 
-      - name: Merge raw binaries artifact
-        uses: actions/upload-artifact/merge@v4
+      - name: Upload raw binaries artifact
+        uses: actions/upload-artifact@v4
         with:
           name: godot-imgui
-          pattern: godot-imgui-*
-          delete-merged: true
+          path: bin-merged/

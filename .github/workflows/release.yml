@@ -3,11 +3,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g., v1.0.0)'
+        description: "Release version (e.g., v1.0.0)"
         required: true
         type: string
       prerelease:
-        description: 'Mark as pre-release'
+        description: "Mark as pre-release"
         required: false
         type: boolean
         default: false
@@ -31,16 +31,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: godot-imgui-addon
-          path: addons
+          path: .
 
       - name: Create addon zip
         shell: bash
         run: |
-          cd addons
-          zip -r ../godot-imgui-addon.zip godot-imgui/
-          cd ..
+          # The artifact already contains the addons/ folder structure
+          zip -r godot-imgui-addon.zip addons/
           echo "Created addon zip:"
           ls -lh godot-imgui-addon.zip
+          echo "Contents:"
+          unzip -l godot-imgui-addon.zip | head -20
 
       - name: Download raw binaries artifact
         uses: actions/download-artifact@v4
