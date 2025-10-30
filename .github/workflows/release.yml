@@ -1,0 +1,88 @@
+name: Create Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  # First, build all platforms
+  build:
+    uses: ./.github/workflows/builds.yml
+
+  # Create and upload the release
+  release:
+    runs-on: ubuntu-22.04
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download addon artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-imgui-addon
+          path: addons
+
+      - name: Create addon zip
+        shell: bash
+        run: |
+          cd addons
+          zip -r ../godot-imgui-addon.zip godot-imgui/
+          cd ..
+          echo "Created addon zip:"
+          ls -lh godot-imgui-addon.zip
+
+      - name: Download raw binaries artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: godot-imgui
+          path: bin-raw
+
+      - name: Create raw binaries zip
+        shell: bash
+        run: |
+          cd bin-raw
+          zip -r ../godot-imgui-binaries.zip .
+          cd ..
+          echo "Created binaries zip:"
+          ls -lh godot-imgui-binaries.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.version }}
+          name: Release ${{ inputs.version }}
+          draft: false
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: true
+          files: |
+            godot-imgui-addon.zip
+            godot-imgui-binaries.zip
+          body: |
+            ## Installation
+
+            ### For Godot Projects (Recommended)
+            1. Download `godot-imgui-addon.zip`
+            2. Extract the `addons` folder
+            3. Copy the `addons/godot-imgui` folder into your Godot project's `addons` directory
+            4. Restart Godot or reload your project
+
+            ### For Development
+            If you need just the binaries, download `godot-imgui-binaries.zip` which contains the raw compiled libraries for all platforms.
+
+            ## Platforms Supported
+            - Windows (x86_64)
+            - Linux (x86_64)
+            - macOS (Universal)
+            - Android (ARM64)
+            - iOS (ARM64)
