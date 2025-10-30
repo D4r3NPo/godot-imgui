@@ -1,7 +1,7 @@
 [configuration]
 
 entry_symbol = "godot_imgui_init"
-compatibility_minimum = "4.1"
+compatibility_minimum = "4.3"
 
 [libraries]
 macos.single.debug = "./macos/libgodot-imgui.macos.template_debug.dylib"
