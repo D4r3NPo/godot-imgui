@@ -10,12 +10,13 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        target: [
+        target:
+          [
             { platform: macos, arch: universal, os: macos-latest },
             { platform: linux, arch: x86_64, os: ubuntu-22.04 },
-            # { platform: ios, arch: arm64, os: macos-latest },
-            # { platform: windows, arch: x86_64, os: windows-latest },
-            # { platform: android, arch: arm64, os: ubuntu-22.04 },
+            { platform: ios, arch: arm64, os: macos-latest },
+            { platform: windows, arch: x86_64, os: windows-latest },
+            { platform: android, arch: arm64, os: ubuntu-22.04 },
           ]
         target-type: [template_debug, template_release]
         float-precision: [single]
@@ -63,8 +64,6 @@ jobs:
           path: |
             ${{ github.workspace }}/bin/**
 
-  # Merges all the build artifacts together into a single godot-imgui artifact.
-  # If you comment out this step, all the builds will be uploaded individually.
   merge:
     runs-on: ubuntu-22.04
     needs: build
