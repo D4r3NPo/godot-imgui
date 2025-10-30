@@ -8,15 +8,14 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        target:
-          [
-            { platform: linux, arch: x86_64, os: ubuntu-22.04 },
-            { platform: windows, arch: x86_64, os: windows-latest },
+        target: [
             { platform: macos, arch: universal, os: macos-latest },
-            { platform: android, arch: arm64, os: ubuntu-22.04 },
-            { platform: ios, arch: arm64, os: macos-latest },
+            { platform: linux, arch: x86_64, os: ubuntu-22.04 },
+            # { platform: ios, arch: arm64, os: macos-latest },
+            # { platform: windows, arch: x86_64, os: windows-latest },
+            # { platform: android, arch: arm64, os: ubuntu-22.04 },
           ]
         target-type: [template_debug, template_release]
         float-precision: [single]
@@ -28,22 +27,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
-
-      # Lint
-      #- name: Setup clang-format
-      #  shell: bash
-      #  run: |
-      #    python -m pip install clang-format
-      #- name: Run clang-format
-      #  shell: bash
-      #  run: |
-      #    clang-format src/** --dry-run --Werror
-
-      # Add linux x86_32 toolchain
-      - name: Install multilib support
-        if: ${{ matrix.target.platform == 'linux' && matrix.target.arch == 'x86_32' }}
-        run: |
-          sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
 
       # Setup dependencies
       - name: Setup godot-cpp
@@ -73,14 +56,6 @@ jobs:
           scons-cache: ${{ github.workspace }}/.scons-cache/
           cache-name: ${{ matrix.target.platform }}_${{ matrix.target.arch }}_${{ matrix.float-precision }}_${{ matrix.target-type }}
 
-      # Clean up compilation files
-      - name: Windows - Delete compilation files
-        if: ${{ matrix.target.platform == 'windows' }}
-        shell: pwsh
-        run: |
-          Remove-Item bin/* -Include *.exp,*.lib,*.pdb -Force
-
-      # Upload the build
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -96,6 +71,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: false
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -103,43 +80,20 @@ jobs:
           pattern: godot-imgui-*
           path: artifacts
 
+      - name: Delete Artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: godot-imgui-*
+
       - name: Create addons folder structure
-        shell: bash
+        shell: sh
         run: |
-          # Create the addons/godot-imgui directory structure
-          mkdir -p addons/godot-imgui
-
-          # Copy the .gdextension file
-          cp demo/bin/godot-imgui.gdextension addons/godot-imgui/
-
-          # Merge binaries from all artifacts into the addons folder
-          for artifact_dir in artifacts/godot-imgui-*; do
-            if [ -d "$artifact_dir/bin" ]; then
-              # Copy only the platform directories from bin/, not the bin folder itself
-              cp -r "$artifact_dir"/bin/* addons/godot-imgui/
-            fi
-          done
-
-          # Display the structure for verification
-          echo "Addons folder structure:"
-          ls -R addons/
-
-          # Also create a merged bin directory for the raw binaries artifact
-          mkdir -p bin-merged
-          for artifact_dir in artifacts/godot-imgui-*; do
-            if [ -d "$artifact_dir/bin" ]; then
-              cp -r "$artifact_dir"/bin/* bin-merged/
-            fi
-          done
+          mkdir -p upload/addons/godot-imgui
+          cp -r artifacts/*/* upload/addons/godot-imgui
+          cp demo/bin/godot-imgui.gdextension upload/addons/godot-imgui/
 
       - name: Upload addons artifact
         uses: actions/upload-artifact@v4
         with:
           name: godot-imgui-addon
-          path: addons/
-
-      - name: Upload raw binaries artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: godot-imgui
-          path: bin-merged/
+          path: upload/
