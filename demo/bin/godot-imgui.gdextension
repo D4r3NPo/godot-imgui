@@ -4,7 +4,6 @@ entry_symbol = "godot_imgui_init"
 compatibility_minimum = "4.1"
 
 [libraries]
-; Relative paths ensure that our GDExtension can be placed anywhere in the project directory.
 macos.single.debug = "./macos/libgodot-imgui.macos.template_debug.dylib"
 macos.double.debug = "./macos/libgodot-imgui.macos.template_debug.double.dylib"
 macos.single.release = "./macos/libgodot-imgui.macos.template_release.dylib"
