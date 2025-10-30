@@ -9,49 +9,6 @@ A Dear ImGui binding for Godot 4.3+ using GDExtension (C++).
 - Compatible with Godot 4.3+
 - Cross-platform support
 
-## Testing
-
-Open the `demo` folder in the Godot editor.
-
-## License
-
-This project integrates:
-- Dear ImGui (MIT License)
-- godot-cpp (MIT License)
-
-## Building
-
-### Prerequisites
-
-- Python 3.6+
-- SCons build system
-- C++17 compatible compiler
-  - macOS: Xcode Command Line Tools
-  - Windows: Visual Studio 2019 or newer
-  - Linux: GCC 9+ or Clang 10+
-- Git (for cloning with submodules)
-
-### Build Instructions
-
-1. Clone the repository with submodules:
-```bash
-git clone --recurse-submodules https://github.com/D4r3NPo/godot-imgui.git
-cd imgui-godot
-```
-
-**If you already cloned without submodules:**
-```bash
-git submodule update --init --recursive
-```
-
-2. Build for your platform:
-
-```bash
-scons platform=<macos|windows|linux> target=<template_debug|template_release>
-```
-
-3. The compiled library will be placed in `bin/`
-
 ## Usage
 
 1. Add an `ImGuiGodot` node to your scene:
@@ -96,3 +53,56 @@ func _process(_delta):
 
 	imgui.end()
 ```
+
+## Installation
+
+1. Download `godot-imgui-addon.zip`
+2. Extract the `addons` folder
+3. Copy the `addons/godot-imgui` folder into your Godot project's `addons` directory
+4. Restart Godot or reload your project
+
+## Building
+
+### Prerequisites
+
+- Python 3.6+
+- SCons build system
+- C++17 compatible compiler
+  - macOS: Xcode Command Line Tools
+  - Windows: Visual Studio 2019 or newer
+  - Linux: GCC 9+ or Clang 10+
+- Git (for cloning with submodules)
+
+### Build Instructions
+
+1. Clone the repository with submodules:
+
+```bash
+git clone --recurse-submodules https://github.com/D4r3NPo/godot-imgui.git
+cd imgui-godot
+```
+
+**If you already cloned without submodules:**
+
+```bash
+git submodule update --init --recursive
+```
+
+2. Build for your platform:
+
+```bash
+scons platform=<macos|windows|linux> target=<template_debug|template_release>
+```
+
+3. The compiled library will be placed in `bin/`
+
+### Testing
+
+Open the `demo` folder in the Godot editor.
+
+## License
+
+This project integrates:
+
+- Dear ImGui (MIT License)
+- godot-cpp (MIT License)
