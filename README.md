@@ -1,40 +1,98 @@
-# godot-cpp template
-This repository serves as a quickstart template for GDExtension development with Godot 4.0+.
+# ImGui-Godot
 
-## Contents
-* An empty Godot project (`demo/`)
-* godot-cpp as a submodule (`godot-cpp/`)
-* GitHub Issues template (`.github/ISSUE_TEMPLATE.yml`)
-* GitHub CI/CD workflows to publish your library packages when creating a release (`.github/workflows/builds.yml`)
-* preconfigured source files for C++ development of the GDExtension (`src/`)
-* setup to automatically generate `.xml` files in a `doc_classes/` directory to be parsed by Godot as [GDExtension built-in documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdextension/gdextension_docs_system.html)
+A Dear ImGui binding for Godot 4.3+ using GDExtension (C++).
 
-## Usage - Template
+## Features
 
-To use this template, log in to GitHub and click the green "Use this template" button at the top of the repository page.
-This will let you create a copy of this repository with a clean git history. Make sure you clone the correct branch as these are configured for development of their respective Godot development branches and differ from each other. Refer to the docs to see what changed between the versions.
+- Native C++ GDExtension implementation
+- Direct integration with Godot's input system
+- Compatible with Godot 4.3+
+- Cross-platform support
 
-For getting started after cloning your own copy to your local machine, you should: 
-* initialize the godot-cpp git submodule via `git submodule update --init`
-* change the name of your library
-  * change the name of the compiled library file inside the `SConstruct` file by modifying the `libname` string.
-  * change the pathnames of the to be loaded library name inside the `demo/bin/example.gdextension` file. By replacing `EXTENSION-NAME` only to the name specified in your `SConstruct` file.
-  * change the name of the `demo/bin/example.gdextension` file
-* change the `entry_symbol` string inside your `demo/bin/your-extension.gdextension` file to be configured for your GDExtension name. This should be the same as the `GDExtensionBool GDE_EXPORT` external C function. As the name suggests, this sets the entry function for your GDExtension to be loaded by the Godot editors C API.
-* register the classes you want Godot to interact with inside the `register_types.cpp` file in the initialization method (here `initialize_gdextension_types`) in the syntax `GDREGISTER_CLASS(CLASS-NAME);`.
+## Testing
 
-### Configuring an IDE 
-You can develop your own extension with any text editor and by invoking scons on the command line, but if you want to work with an IDE (Integrated Development Environment), you can use a compilation database file called `compile_commands.json`. Most IDEs should automatically identify this file, and self-configure appropriately.
-To generate the database file, you can run one of the following commands in the project root directory:
-```shell
-# Generate compile_commands.json while compiling
-scons compiledb=yes
+Open the `demo` folder in the Godot editor.
 
-# Generate compile_commands.json without compiling
-scons compiledb=yes compile_commands.json
+## License
+
+This project integrates:
+- Dear ImGui (MIT License)
+- godot-cpp (MIT License)
+
+## Building
+
+### Prerequisites
+
+- Python 3.6+
+- SCons build system
+- C++17 compatible compiler
+  - macOS: Xcode Command Line Tools
+  - Windows: Visual Studio 2019 or newer
+  - Linux: GCC 9+ or Clang 10+
+- Git (for cloning with submodules)
+
+### Build Instructions
+
+1. Clone the repository with submodules:
+```bash
+git clone --recurse-submodules https://github.com/D4r3NPo/godot-imgui.git
+cd imgui-godot
 ```
 
-## Usage - Actions
+**If you already cloned without submodules:**
+```bash
+git submodule update --init --recursive
+```
 
-This repository comes with a GitHub action that builds the GDExtension for cross-platform use. It triggers automatically for each pushed change. You can find and edit it in [builds.yml](.github/workflows/builds.yml).
-After a workflow run is complete, you can find the file `godot-cpp-template.zip` on the `Actions` tab on GitHub.
+2. Build for your platform:
+
+```bash
+scons platform=<macos|windows|linux> target=<template_debug|template_release>
+```
+
+3. The compiled library will be placed in `bin/`
+
+## Usage
+
+1. Add an `ImGuiGodot` node to your scene:
+
+```gdscript
+extends Node
+
+var imgui: ImGuiGodot
+
+func _ready() -> void:
+	imgui = ImGuiGodot.new()
+	imgui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(imgui)
+```
+
+2. Use ImGui in your scripts:
+
+```gdscript
+
+var counter: int = 0
+var slider_value: float = 0.5
+var checkbox_value: bool = false
+
+func _process(_delta):
+	if not imgui: return
+
+	if imgui.begin("ImGui Window !"):
+		imgui.text("Welcome to ImGui-Godot!")
+
+		if imgui.button("Button"):
+			print("Button clicked from GDScript!")
+
+		imgui.separator()
+
+		imgui.text("Counter: " + str(counter))
+		if imgui.button("Increment Counter"):
+			counter += 1
+
+		imgui.separator()
+		checkbox_value = imgui.checkbox("Test Checkbox", checkbox_value)
+		slider_value = imgui.slider_float("Test Slider", slider_value, 0.0, 1.0)
+
+	imgui.end()
+```
