@@ -37,12 +37,25 @@
 			<param index="1" name="has_close_button" type="bool" default="false" />
 			<description>
 				Begin a new ImGui window. Must be paired with [method end]. Returns [code]false[/code] if the window is collapsed, allowing you to skip expensive content generation.
-				[b]Example:[/b]
-				[codeblock]
-				if imgui.begin("Debug Window"):
-				    imgui.text("Window content")
-				imgui.end()
-				[/codeblock]
+			</description>
+		</method>
+		<method name="begin_child">
+			<return type="bool" />
+			<param index="0" name="str_id" type="String" />
+			<param index="1" name="size" type="Vector2" default="Vector2(0, 0)" />
+			<param index="2" name="child_flags" type="int" default="0" />
+			<param index="3" name="window_flags" type="int" default="0" />
+			<description>
+				Begin a child window region with independent scrolling/clipping. Must be paired with [method end_child].
+			</description>
+		</method>
+		<method name="begin_combo">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="preview_value" type="String" />
+			<param index="2" name="flags" type="int" default="0" />
+			<description>
+				Begin a combo box (dropdown list). Must be paired with [method end_combo]. Returns [code]true[/code] if open.
 			</description>
 		</method>
 		<method name="begin_frame">
@@ -51,16 +64,94 @@
 				Manually begin a new ImGui frame. Only needed if you want manual frame control. Normally, frames are managed automatically in [method _process].
 			</description>
 		</method>
+		<method name="begin_group">
+			<return type="void" />
+			<description>
+				Lock horizontal starting position. All items between [method begin_group] and [method end_group] will be on the same line. Must be paired with [method end_group].
+			</description>
+		</method>
+		<method name="begin_main_menu_bar">
+			<return type="bool" />
+			<description>
+				Begin the main menu bar at the top of the viewport. Must be paired with [method end_main_menu_bar]. Returns [code]true[/code] if menu bar is visible.
+			</description>
+		</method>
+		<method name="begin_menu">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="enabled" type="bool" default="true" />
+			<description>
+				Begin a menu (dropdown). Must be paired with [method end_menu]. Returns [code]true[/code] if menu is open.
+			</description>
+		</method>
+		<method name="begin_menu_bar">
+			<return type="bool" />
+			<description>
+				Begin a menu bar within a window. Must be paired with [method end_menu_bar]. Returns [code]true[/code] if menu bar is visible.
+			</description>
+		</method>
+		<method name="begin_popup">
+			<return type="bool" />
+			<param index="0" name="str_id" type="String" />
+			<param index="1" name="window_flags" type="int" default="0" />
+			<description>
+				Begin a popup. Must be paired with [method end_popup]. Returns [code]true[/code] if popup is open. Use [method open_popup] to open it.
+			</description>
+		</method>
+		<method name="begin_popup_modal">
+			<return type="bool" />
+			<param index="0" name="name" type="String" />
+			<param index="1" name="has_close_button" type="bool" default="false" />
+			<param index="2" name="window_flags" type="int" default="0" />
+			<description>
+				Begin a modal popup (blocks interaction with other windows). Must be paired with [method end_popup]. Returns [code]true[/code] if popup is open.
+			</description>
+		</method>
+		<method name="begin_tab_bar">
+			<return type="bool" />
+			<param index="0" name="str_id" type="String" />
+			<param index="1" name="flags" type="int" default="0" />
+			<description>
+				Begin a tab bar. Must be paired with [method end_tab_bar]. Returns [code]true[/code] if tab bar is visible.
+			</description>
+		</method>
+		<method name="begin_tab_item">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="has_close_button" type="bool" default="false" />
+			<param index="2" name="flags" type="int" default="0" />
+			<description>
+				Begin a tab item. Must be paired with [method end_tab_item]. Returns [code]true[/code] if tab is selected.
+			</description>
+		</method>
+		<method name="begin_table">
+			<return type="bool" />
+			<param index="0" name="str_id" type="String" />
+			<param index="1" name="columns" type="int" />
+			<param index="2" name="flags" type="int" default="0" />
+			<param index="3" name="outer_size" type="Vector2" default="Vector2(0, 0)" />
+			<param index="4" name="inner_width" type="float" default="0.0" />
+			<description>
+				Begin a table. Must be paired with [method end_table]. Returns [code]true[/code] if table is visible.
+			</description>
+		</method>
+		<method name="begin_tooltip">
+			<return type="bool" />
+			<description>
+				Begin a tooltip window. Must be paired with [method end_tooltip]. Returns [code]true[/code] if tooltip should be displayed.
+			</description>
+		</method>
+		<method name="bullet">
+			<return type="void" />
+			<description>
+				Draw a bullet point (•).
+			</description>
+		</method>
 		<method name="bullet_text">
 			<return type="void" />
 			<param index="0" name="text" type="String" />
 			<description>
 				Display text with a bullet point (•) prefix.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.bullet_text("First item")
-				imgui.bullet_text("Second item")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="button">
@@ -69,15 +160,6 @@
 			<param index="1" name="size" type="Vector2" default="Vector2(0, 0)" />
 			<description>
 				Display a button. Returns [code]true[/code] when clicked. Use [code]Vector2(0, 0)[/code] for auto-sizing.
-				[b]Example:[/b]
-				[codeblock]
-				if imgui.button("Click Me"):
-				    print("Button was clicked!")
-
-				# Custom size
-				if imgui.button("Wide Button", Vector2(200, 0)):
-				    print("Wide button clicked!")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="checkbox">
@@ -86,23 +168,145 @@
 			<param index="1" name="value" type="bool" />
 			<description>
 				Display a checkbox. Returns the new state.
-				[b]Note:[/b] You must store and pass the state back each frame.
-				[b]Example:[/b]
-				[codeblock]
-				var enabled: bool = false
-
-				func _process(_delta):
-				    enabled = imgui.checkbox("Enable feature", enabled)
-				    if enabled:
-				        imgui.text("Feature is enabled!")
-				[/codeblock]
+			</description>
+		</method>
+		<method name="close_current_popup">
+			<return type="void" />
+			<description>
+				Close the current popup programmatically.
+			</description>
+		</method>
+		<method name="collapsing_header">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="flags" type="int" default="0" />
+			<description>
+				Create a collapsible section header. Returns [code]true[/code] when open.
+			</description>
+		</method>
+		<method name="color_button">
+			<return type="bool" />
+			<param index="0" name="desc_id" type="String" />
+			<param index="1" name="color" type="Color" />
+			<param index="2" name="flags" type="int" default="0" />
+			<param index="3" name="size" type="Vector2" default="Vector2(0, 0)" />
+			<description>
+				Display a colored button/square. Returns [code]true[/code] when clicked.
+			</description>
+		</method>
+		<method name="color_edit3">
+			<return type="Color" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="color" type="Color" />
+			<param index="2" name="flags" type="int" default="0" />
+			<description>
+				Edit RGB color (preserves alpha). Returns the new color.
+			</description>
+		</method>
+		<method name="color_edit4">
+			<return type="Color" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="color" type="Color" />
+			<param index="2" name="flags" type="int" default="0" />
+			<description>
+				Edit RGBA color. Returns the new color.
+			</description>
+		</method>
+		<method name="color_picker3">
+			<return type="Color" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="color" type="Color" />
+			<param index="2" name="flags" type="int" default="0" />
+			<description>
+				Color picker widget for RGB (preserves alpha). Returns the new color.
+			</description>
+		</method>
+		<method name="color_picker4">
+			<return type="Color" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="color" type="Color" />
+			<param index="2" name="flags" type="int" default="0" />
+			<description>
+				Color picker widget for RGBA. Returns the new color.
+			</description>
+		</method>
+		<method name="combo">
+			<return type="int" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="current_item" type="int" />
+			<param index="2" name="items" type="PackedStringArray" />
+			<param index="3" name="popup_max_height_in_items" type="int" default="-1" />
+			<description>
+				Simple combo box returning the selected item index.
+			</description>
+		</method>
+		<method name="drag_float">
+			<return type="float" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="float" />
+			<param index="2" name="v_speed" type="float" default="1.0" />
+			<param index="3" name="v_min" type="float" default="0.0" />
+			<param index="4" name="v_max" type="float" default="0.0" />
+			<description>
+				Drag to edit a float value. Returns the new value.
+			</description>
+		</method>
+		<method name="drag_float2">
+			<return type="Vector2" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="Vector2" />
+			<param index="2" name="v_speed" type="float" default="1.0" />
+			<param index="3" name="v_min" type="float" default="0.0" />
+			<param index="4" name="v_max" type="float" default="0.0" />
+			<description>
+				Drag to edit a 2D vector. Returns the new value.
+			</description>
+		</method>
+		<method name="drag_float3">
+			<return type="Vector3" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="Vector3" />
+			<param index="2" name="v_speed" type="float" default="1.0" />
+			<param index="3" name="v_min" type="float" default="0.0" />
+			<param index="4" name="v_max" type="float" default="0.0" />
+			<description>
+				Drag to edit a 3D vector. Returns the new value.
+			</description>
+		</method>
+		<method name="drag_int">
+			<return type="int" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="int" />
+			<param index="2" name="v_speed" type="float" default="1.0" />
+			<param index="3" name="v_min" type="int" default="0" />
+			<param index="4" name="v_max" type="int" default="0" />
+			<description>
+				Drag to edit an integer value. Returns the new value.
+			</description>
+		</method>
+		<method name="dummy">
+			<return type="void" />
+			<param index="0" name="size" type="Vector2" />
+			<description>
+				Add an invisible dummy item of given size. Useful for custom spacing and layouts.
 			</description>
 		</method>
 		<method name="end">
 			<return type="void" />
 			<description>
 				End the current ImGui window. Must be called after [method begin].
-				[b]Note:[/b] Always call [method end] even if [method begin] returned [code]false[/code].
+			</description>
+		</method>
+		<method name="end_child">
+			<return type="void" />
+			<description>
+				End the child window region. Must be called after [method begin_child].
+			</description>
+		</method>
+		<method name="end_combo">
+			<return type="void" />
+			<description>
+				End the combo box. Must be called after [method begin_combo] if it returned [code]true[/code].
 			</description>
 		</method>
 		<method name="end_frame">
@@ -111,10 +315,136 @@
 				Manually end the current ImGui frame and queue rendering. Only needed if you want manual frame control.
 			</description>
 		</method>
+		<method name="end_group">
+			<return type="void" />
+			<description>
+				Unlock horizontal starting position and capture bounding box. Must be called after [method begin_group].
+			</description>
+		</method>
+		<method name="end_main_menu_bar">
+			<return type="void" />
+			<description>
+				End the main menu bar. Must be called after [method begin_main_menu_bar].
+			</description>
+		</method>
+		<method name="end_menu">
+			<return type="void" />
+			<description>
+				End the menu. Must be called after [method begin_menu] if it returned [code]true[/code].
+			</description>
+		</method>
+		<method name="end_menu_bar">
+			<return type="void" />
+			<description>
+				End the menu bar. Must be called after [method begin_menu_bar].
+			</description>
+		</method>
+		<method name="end_popup">
+			<return type="void" />
+			<description>
+				End the popup. Must be called after [method begin_popup] or [method begin_popup_modal].
+			</description>
+		</method>
+		<method name="end_tab_bar">
+			<return type="void" />
+			<description>
+				End the tab bar. Must be called after [method begin_tab_bar].
+			</description>
+		</method>
+		<method name="end_tab_item">
+			<return type="void" />
+			<description>
+				End the tab item. Must be called after [method begin_tab_item] if it returned [code]true[/code].
+			</description>
+		</method>
+		<method name="end_table">
+			<return type="void" />
+			<description>
+				End the table. Must be called after [method begin_table].
+			</description>
+		</method>
+		<method name="end_tooltip">
+			<return type="void" />
+			<description>
+				End the tooltip. Must be called after [method begin_tooltip].
+			</description>
+		</method>
+		<method name="get_content_region_avail">
+			<return type="Vector2" />
+			<description>
+				Get available space from current position to end of region. This is your best friend for responsive layouts.
+			</description>
+		</method>
 		<method name="get_cursor_pos">
 			<return type="Vector2" />
 			<description>
-				Get the current cursor position relative to the window. Returns cursor position in pixels.
+				Get the current cursor position in window-local coordinates.
+			</description>
+		</method>
+		<method name="get_cursor_pos_x">
+			<return type="float" />
+			<description>
+				Get cursor X position in window-local coordinates.
+			</description>
+		</method>
+		<method name="get_cursor_pos_y">
+			<return type="float" />
+			<description>
+				Get cursor Y position in window-local coordinates.
+			</description>
+		</method>
+		<method name="get_cursor_screen_pos">
+			<return type="Vector2" />
+			<description>
+				Get cursor position in absolute screen coordinates. This is your best friend for custom drawing.
+			</description>
+		</method>
+		<method name="get_item_rect_max">
+			<return type="Vector2" />
+			<description>
+				Get the bounding rectangle maximum of last item.
+			</description>
+		</method>
+		<method name="get_item_rect_min">
+			<return type="Vector2" />
+			<description>
+				Get the bounding rectangle minimum of last item.
+			</description>
+		</method>
+		<method name="get_item_rect_size">
+			<return type="Vector2" />
+			<description>
+				Get the bounding rectangle size of last item.
+			</description>
+		</method>
+		<method name="get_mouse_pos">
+			<return type="Vector2" />
+			<description>
+				Get current mouse position in screen coordinates.
+			</description>
+		</method>
+		<method name="get_window_height">
+			<return type="float" />
+			<description>
+				Get current window height in pixels.
+			</description>
+		</method>
+		<method name="get_window_pos">
+			<return type="Vector2" />
+			<description>
+				Get current window position in screen coordinates.
+			</description>
+		</method>
+		<method name="get_window_size">
+			<return type="Vector2" />
+			<description>
+				Get current window size in pixels.
+			</description>
+		</method>
+		<method name="get_window_width">
+			<return type="float" />
+			<description>
+				Get current window width in pixels.
 			</description>
 		</method>
 		<method name="indent">
@@ -122,13 +452,6 @@
 			<param index="0" name="indent_w" type="float" default="0.0" />
 			<description>
 				Increase indentation for subsequent widgets. Pass 0 for default indentation width.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text("Normal")
-				imgui.indent()
-				imgui.text("Indented")
-				imgui.unindent()
-				[/codeblock]
 			</description>
 		</method>
 		<method name="input_float">
@@ -137,13 +460,6 @@
 			<param index="1" name="value" type="float" />
 			<description>
 				Display a float input field. Returns the new value.
-				[b]Example:[/b]
-				[codeblock]
-				var speed: float = 10.0
-
-				func _process(_delta):
-				    speed = imgui.input_float("Speed", speed)
-				[/codeblock]
 			</description>
 		</method>
 		<method name="input_int">
@@ -152,13 +468,6 @@
 			<param index="1" name="value" type="int" />
 			<description>
 				Display an integer input field. Returns the new value.
-				[b]Example:[/b]
-				[codeblock]
-				var count: int = 0
-
-				func _process(_delta):
-				    count = imgui.input_int("Count", count)
-				[/codeblock]
 			</description>
 		</method>
 		<method name="input_text">
@@ -168,13 +477,110 @@
 			<param index="2" name="max_length" type="int" default="256" />
 			<description>
 				Display a text input field. Returns the new text.
-				[b]Example:[/b]
-				[codeblock]
-				var player_name: String = "Player"
-
-				func _process(_delta):
-				    player_name = imgui.input_text("Name", player_name)
-				[/codeblock]
+			</description>
+		</method>
+		<method name="is_item_activated">
+			<return type="bool" />
+			<description>
+				Was the last item just made active? Returns [code]true[/code] on the frame the item became active.
+			</description>
+		</method>
+		<method name="is_item_active">
+			<return type="bool" />
+			<description>
+				Is the last item active (being interacted with)? Returns [code]true[/code] while item is being manipulated.
+			</description>
+		</method>
+		<method name="is_item_clicked">
+			<return type="bool" />
+			<param index="0" name="mouse_button" type="int" default="0" />
+			<description>
+				Was the last item clicked? Returns [code]true[/code] on the frame of the click. Button: 0=left, 1=right, 2=middle.
+			</description>
+		</method>
+		<method name="is_item_deactivated">
+			<return type="bool" />
+			<description>
+				Was the last item just made inactive? Returns [code]true[/code] on the frame the item became inactive.
+			</description>
+		</method>
+		<method name="is_item_deactivated_after_edit">
+			<return type="bool" />
+			<description>
+				Was the last item just made inactive and did its value change? Useful for detecting when user finishes editing.
+			</description>
+		</method>
+		<method name="is_item_edited">
+			<return type="bool" />
+			<description>
+				Did the last item's value change this frame? Returns [code]true[/code] when value is modified.
+			</description>
+		</method>
+		<method name="is_item_focused">
+			<return type="bool" />
+			<description>
+				Is the last item focused (for keyboard navigation)? Returns [code]true[/code] if item has keyboard focus.
+			</description>
+		</method>
+		<method name="is_item_hovered">
+			<return type="bool" />
+			<param index="0" name="flags" type="int" default="0" />
+			<description>
+				Is the last item hovered by mouse? Returns [code]true[/code] if mouse is over the item.
+			</description>
+		</method>
+		<method name="is_item_visible">
+			<return type="bool" />
+			<description>
+				Is the last item visible (not clipped)? Returns [code]true[/code] if item is within visible area.
+			</description>
+		</method>
+		<method name="is_mouse_clicked">
+			<return type="bool" />
+			<param index="0" name="button" type="int" />
+			<param index="1" name="repeat" type="bool" default="false" />
+			<description>
+				Was mouse button clicked? Button: 0=left, 1=right, 2=middle. Set repeat to [code]true[/code] for auto-repeat.
+			</description>
+		</method>
+		<method name="is_mouse_double_clicked">
+			<return type="bool" />
+			<param index="0" name="button" type="int" />
+			<description>
+				Was mouse button double-clicked? Button: 0=left, 1=right, 2=middle.
+			</description>
+		</method>
+		<method name="is_mouse_down">
+			<return type="bool" />
+			<param index="0" name="button" type="int" />
+			<description>
+				Is mouse button held down? Button: 0=left, 1=right, 2=middle.
+			</description>
+		</method>
+		<method name="is_window_appearing">
+			<return type="bool" />
+			<description>
+				Is current window appearing (first frame)? Returns [code]true[/code] on the first frame of window visibility.
+			</description>
+		</method>
+		<method name="is_window_collapsed">
+			<return type="bool" />
+			<description>
+				Is current window collapsed? Returns [code]true[/code] if window is minimized.
+			</description>
+		</method>
+		<method name="is_window_focused">
+			<return type="bool" />
+			<param index="0" name="flags" type="int" default="0" />
+			<description>
+				Is current window focused? Returns [code]true[/code] if window has input focus.
+			</description>
+		</method>
+		<method name="is_window_hovered">
+			<return type="bool" />
+			<param index="0" name="flags" type="int" default="0" />
+			<description>
+				Is current window hovered? Returns [code]true[/code] if mouse is over the window.
 			</description>
 		</method>
 		<method name="label_text">
@@ -183,17 +589,30 @@
 			<param index="1" name="text" type="String" />
 			<description>
 				Display a label and value pair (label aligned left, value aligned right).
-				[b]Example:[/b]
-				[codeblock]
-				imgui.label_text("Name", "Player")
-				imgui.label_text("Health", str(player_health))
-				[/codeblock]
+			</description>
+		</method>
+		<method name="menu_item">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="shortcut" type="String" default="&quot;&quot;" />
+			<param index="2" name="selected" type="bool" default="false" />
+			<param index="3" name="enabled" type="bool" default="true" />
+			<description>
+				Menu item. Returns [code]true[/code] when clicked. Use inside [method begin_menu] or [method begin_menu_bar].
 			</description>
 		</method>
 		<method name="new_line">
 			<return type="void" />
 			<description>
 				Force a new line (undo [method same_line]).
+			</description>
+		</method>
+		<method name="open_popup">
+			<return type="void" />
+			<param index="0" name="str_id" type="String" />
+			<param index="1" name="popup_flags" type="int" default="0" />
+			<description>
+				Open a popup with the given ID. Call this before [method begin_popup] to make the popup appear.
 			</description>
 		</method>
 		<method name="pop_id">
@@ -209,19 +628,27 @@
 				Pop custom colors from the style stack. Specify how many colors to pop (default: 1).
 			</description>
 		</method>
+		<method name="pop_style_var">
+			<return type="void" />
+			<param index="0" name="count" type="int" default="1" />
+			<description>
+				Pop style variable modifications from the stack. Specify how many to pop (default: 1).
+			</description>
+		</method>
+		<method name="progress_bar">
+			<return type="void" />
+			<param index="0" name="fraction" type="float" />
+			<param index="1" name="size" type="Vector2" default="Vector2(-1, 0)" />
+			<param index="2" name="overlay" type="String" default="&quot;&quot;" />
+			<description>
+				Display a progress bar (0.0 to 1.0). Use -1 for size.x to fill available width.
+			</description>
+		</method>
 		<method name="push_id">
 			<return type="void" />
 			<param index="0" name="id" type="String" />
 			<description>
 				Push an identifier onto the ID stack. Useful for creating unique widgets in loops.
-				[b]Example:[/b]
-				[codeblock]
-				for i in range(5):
-				    imgui.push_id("item_" + str(i))
-				    if imgui.button("Delete"):
-				        print("Delete item ", i)
-				    imgui.pop_id()
-				[/codeblock]
 			</description>
 		</method>
 		<method name="push_style_color">
@@ -229,13 +656,23 @@
 			<param index="0" name="idx" type="int" />
 			<param index="1" name="color" type="Color" />
 			<description>
-				Push a custom color onto the style stack. Common color indices: 0 = Text, 7 = WindowBg, 21 = Button, 22 = ButtonHovered, 23 = ButtonActive. See ImGui documentation for complete list.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.push_style_color(21, Color.RED)  # Red button
-				imgui.button("Danger")
-				imgui.pop_style_color()
-				[/codeblock]
+				Push a custom color onto the style stack. See ImGui documentation for color indices.
+			</description>
+		</method>
+		<method name="push_style_var_float">
+			<return type="void" />
+			<param index="0" name="idx" type="int" />
+			<param index="1" name="val" type="float" />
+			<description>
+				Modify a float style variable. Must be paired with [method pop_style_var].
+			</description>
+		</method>
+		<method name="push_style_var_vec2">
+			<return type="void" />
+			<param index="0" name="idx" type="int" />
+			<param index="1" name="val" type="Vector2" />
+			<description>
+				Modify a Vector2 style variable. Must be paired with [method pop_style_var].
 			</description>
 		</method>
 		<method name="radio_button">
@@ -244,16 +681,6 @@
 			<param index="1" name="active" type="bool" />
 			<description>
 				Display a radio button. Returns [code]true[/code] if selected.
-				[b]Example:[/b]
-				[codeblock]
-				var selection: int = 0
-
-				func _process(_delta):
-				    if imgui.radio_button("Option A", selection == 0):
-				        selection = 0
-				    if imgui.radio_button("Option B", selection == 1):
-				        selection = 1
-				[/codeblock]
 			</description>
 		</method>
 		<method name="same_line">
@@ -262,12 +689,6 @@
 			<param index="1" name="spacing" type="float" default="-1.0" />
 			<description>
 				Continue on the same line instead of starting a new line. Useful for horizontal layouts.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text("Label:")
-				imgui.same_line()
-				imgui.button("Button")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="selectable">
@@ -276,40 +697,112 @@
 			<param index="1" name="selected" type="bool" default="false" />
 			<description>
 				Display a selectable item. Returns [code]true[/code] if clicked.
-				[b]Example:[/b]
-				[codeblock]
-				var items = ["Item 1", "Item 2", "Item 3"]
-				var selected_idx = 0
-
-				func _process(_delta):
-				    for i in range(items.size()):
-				        if imgui.selectable(items[i], i == selected_idx):
-				            selected_idx = i
-				[/codeblock]
 			</description>
 		</method>
 		<method name="separator">
 			<return type="void" />
 			<description>
 				Display a horizontal separator line.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text("Section 1")
-				imgui.separator()
-				imgui.text("Section 2")
-				[/codeblock]
+			</description>
+		</method>
+		<method name="separator_text">
+			<return type="void" />
+			<param index="0" name="label" type="String" />
+			<description>
+				Horizontal separator with centered text label.
 			</description>
 		</method>
 		<method name="set_cursor_pos">
 			<return type="void" />
 			<param index="0" name="pos" type="Vector2" />
 			<description>
-				Set the cursor position for custom layouts.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.set_cursor_pos(Vector2(100, 50))
-				imgui.text("Text at specific position")
-				[/codeblock]
+				Set the cursor position in window-local coordinates for custom layouts.
+			</description>
+		</method>
+		<method name="set_cursor_pos_x">
+			<return type="void" />
+			<param index="0" name="x" type="float" />
+			<description>
+				Set cursor X position in window-local coordinates.
+			</description>
+		</method>
+		<method name="set_cursor_pos_y">
+			<return type="void" />
+			<param index="0" name="y" type="float" />
+			<description>
+				Set cursor Y position in window-local coordinates.
+			</description>
+		</method>
+		<method name="set_cursor_screen_pos">
+			<return type="void" />
+			<param index="0" name="pos" type="Vector2" />
+			<description>
+				Set cursor position in absolute screen coordinates.
+			</description>
+		</method>
+		<method name="set_next_window_collapsed">
+			<return type="void" />
+			<param index="0" name="collapsed" type="bool" />
+			<param index="1" name="cond" type="int" default="0" />
+			<description>
+				Set collapsed state for next window (call before [method begin]). Condition: 0=Always, 1=Once, 2=FirstUseEver, 3=Appearing.
+			</description>
+		</method>
+		<method name="set_next_window_focus">
+			<return type="void" />
+			<description>
+				Set next window to be focused (call before [method begin]).
+			</description>
+		</method>
+		<method name="set_next_window_pos">
+			<return type="void" />
+			<param index="0" name="pos" type="Vector2" />
+			<param index="1" name="cond" type="int" default="0" />
+			<param index="2" name="pivot" type="Vector2" default="Vector2(0, 0)" />
+			<description>
+				Set position for next window (call before [method begin]). Use pivot=(0.5, 0.5) to center on given point.
+			</description>
+		</method>
+		<method name="set_next_window_size">
+			<return type="void" />
+			<param index="0" name="size" type="Vector2" />
+			<param index="1" name="cond" type="int" default="0" />
+			<description>
+				Set size for next window (call before [method begin]). Set axis to 0 for auto-fit on that axis.
+			</description>
+		</method>
+		<method name="set_tooltip">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Set a simple text tooltip (convenience function). Typically used with [method is_item_hovered].
+			</description>
+		</method>
+		<method name="show_about_window">
+			<return type="void" />
+			<param index="0" name="show" type="bool" default="true" />
+			<description>
+				Display the ImGui about window with version information and credits.
+			</description>
+		</method>
+		<method name="show_demo_window">
+			<return type="void" />
+			<param index="0" name="show" type="bool" default="true" />
+			<description>
+				Display the ImGui demo window. This is a comprehensive showcase of all ImGui features and the best way to learn the API!
+			</description>
+		</method>
+		<method name="show_metrics_window">
+			<return type="void" />
+			<param index="0" name="show" type="bool" default="true" />
+			<description>
+				Display the ImGui metrics/debugger window. Shows internal ImGui state, memory usage, draw calls, and other debug information.
+			</description>
+		</method>
+		<method name="show_style_editor">
+			<return type="void" />
+			<description>
+				Display the style editor UI. Must be called within a window (between [method begin] and [method end]). Allows live editing of all ImGui style variables and colors.
 			</description>
 		</method>
 		<method name="slider_float">
@@ -320,13 +813,26 @@
 			<param index="3" name="max_value" type="float" />
 			<description>
 				Display a float slider. Returns the new value.
-				[b]Example:[/b]
-				[codeblock]
-				var volume: float = 0.5
-
-				func _process(_delta):
-				    volume = imgui.slider_float("Volume", volume, 0.0, 1.0)
-				[/codeblock]
+			</description>
+		</method>
+		<method name="slider_float2">
+			<return type="Vector2" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="Vector2" />
+			<param index="2" name="v_min" type="float" />
+			<param index="3" name="v_max" type="float" />
+			<description>
+				Slider for 2D vector. Returns the new value.
+			</description>
+		</method>
+		<method name="slider_float3">
+			<return type="Vector3" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="Vector3" />
+			<param index="2" name="v_min" type="float" />
+			<param index="3" name="v_max" type="float" />
+			<description>
+				Slider for 3D vector. Returns the new value.
 			</description>
 		</method>
 		<method name="slider_int">
@@ -337,13 +843,6 @@
 			<param index="3" name="max_value" type="int" />
 			<description>
 				Display an integer slider. Returns the new value.
-				[b]Example:[/b]
-				[codeblock]
-				var level: int = 1
-
-				func _process(_delta):
-				    level = imgui.slider_int("Level", level, 1, 100)
-				[/codeblock]
 			</description>
 		</method>
 		<method name="small_button">
@@ -351,11 +850,6 @@
 			<param index="0" name="label" type="String" />
 			<description>
 				Display a small button without a frame. Returns [code]true[/code] when clicked.
-				[b]Example:[/b]
-				[codeblock]
-				if imgui.small_button("×"):
-				    print("Close button clicked")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="spacing">
@@ -364,16 +858,48 @@
 				Add vertical spacing between widgets.
 			</description>
 		</method>
+		<method name="table_headers_row">
+			<return type="void" />
+			<description>
+				Submit all headers cells based on data from [method table_setup_column]. Use inside tables after setup.
+			</description>
+		</method>
+		<method name="table_next_column">
+			<return type="bool" />
+			<description>
+				Move to the next column in a table. Returns [code]false[/code] if column is not visible.
+			</description>
+		</method>
+		<method name="table_next_row">
+			<return type="void" />
+			<param index="0" name="row_flags" type="int" default="0" />
+			<param index="1" name="min_row_height" type="float" default="0.0" />
+			<description>
+				Move to the next row in a table.
+			</description>
+		</method>
+		<method name="table_set_column_index">
+			<return type="bool" />
+			<param index="0" name="column_n" type="int" />
+			<description>
+				Jump to specific column in a table. Returns [code]false[/code] if column is not visible.
+			</description>
+		</method>
+		<method name="table_setup_column">
+			<return type="void" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="flags" type="int" default="0" />
+			<param index="2" name="init_width_or_weight" type="float" default="0.0" />
+			<param index="3" name="user_id" type="int" default="0" />
+			<description>
+				Setup column properties (call before table content, after [method begin_table]).
+			</description>
+		</method>
 		<method name="text">
 			<return type="void" />
 			<param index="0" name="text" type="String" />
 			<description>
 				Display plain text.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text("Hello, World!")
-				imgui.text("FPS: " + str(Engine.get_frames_per_second()))
-				[/codeblock]
 			</description>
 		</method>
 		<method name="text_colored">
@@ -382,11 +908,6 @@
 			<param index="1" name="text" type="String" />
 			<description>
 				Display colored text.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text_colored(Color.RED, "Error: Invalid input")
-				imgui.text_colored(Color(1, 0.5, 0), "Warning message")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="text_disabled">
@@ -394,10 +915,6 @@
 			<param index="0" name="text" type="String" />
 			<description>
 				Display grayed-out text with disabled styling.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text_disabled("This feature is not available")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="text_wrapped">
@@ -405,25 +922,13 @@
 			<param index="0" name="text" type="String" />
 			<description>
 				Display text with automatic word wrapping at the edge of the window.
-				[b]Example:[/b]
-				[codeblock]
-				imgui.text_wrapped("This is a very long text that will automatically wrap.")
-				[/codeblock]
 			</description>
 		</method>
 		<method name="tree_node">
 			<return type="bool" />
 			<param index="0" name="label" type="String" />
 			<description>
-				Create a collapsible tree node. Returns [code]true[/code] if expanded.
-				[b]Important:[/b] Must call [method tree_pop] if this returns [code]true[/code].
-				[b]Example:[/b]
-				[codeblock]
-				if imgui.tree_node("Settings"):
-				    imgui.text("Option 1")
-				    imgui.text("Option 2")
-				    imgui.tree_pop()
-				[/codeblock]
+				Create a collapsible tree node. Returns [code]true[/code] if expanded. Must call [method tree_pop] if this returns [code]true[/code].
 			</description>
 		</method>
 		<method name="tree_pop">
