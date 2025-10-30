@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ImGuiGodot" inherits="Control" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+		Dear ImGui integration for Godot.
+	</brief_description>
+	<description>
+		Provides immediate-mode GUI functions for debugging tools, developer consoles, and in-game editors. Add this node to your scene and call its methods in [method _process] to create ImGui windows and widgets.
+		ImGui uses an immediate-mode paradigm, meaning you create UI every frame. This is perfect for debug tools and dynamic interfaces.
+		[b]Example:[/b]
+		[codeblock]
+		var imgui: ImGuiGodot
+
+		func _ready():
+		    imgui = ImGuiGodot.new()
+		    imgui.set_anchors_preset(Control.PRESET_FULL_RECT)
+		    add_child(imgui)
+
+		func _process(_delta):
+		    if imgui.begin("My Window"):
+		        imgui.text("Hello, ImGui!")
+		        if imgui.button("Click Me"):
+		            print("Button clicked!")
+		        imgui.end()
+		[/codeblock]
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="begin">
+			<return type="bool" />
+			<param index="0" name="name" type="String" />
+			<param index="1" name="has_close_button" type="bool" default="false" />
+			<description>
+				Begin a new ImGui window. Must be paired with [method end]. Returns [code]false[/code] if the window is collapsed, allowing you to skip expensive content generation.
+				[b]Example:[/b]
+				[codeblock]
+				if imgui.begin("Debug Window"):
+				    imgui.text("Window content")
+				    imgui.end()
+				[/codeblock]
+			</description>
+		</method>
+		<method name="begin_frame">
+			<return type="void" />
+			<description>
+				Manually begin a new ImGui frame. Only needed if you want manual frame control. Normally, frames are managed automatically in [method _process].
+			</description>
+		</method>
+		<method name="bullet_text">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Display text with a bullet point (•) prefix.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.bullet_text("First item")
+				imgui.bullet_text("Second item")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="button">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="size" type="Vector2" default="Vector2(0, 0)" />
+			<description>
+				Display a button. Returns [code]true[/code] when clicked. Use [code]Vector2(0, 0)[/code] for auto-sizing.
+				[b]Example:[/b]
+				[codeblock]
+				if imgui.button("Click Me"):
+				    print("Button was clicked!")
+
+				# Custom size
+				if imgui.button("Wide Button", Vector2(200, 0)):
+				    print("Wide button clicked!")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="checkbox">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="bool" />
+			<description>
+				Display a checkbox. Returns the new state.
+				[b]Note:[/b] You must store and pass the state back each frame.
+				[b]Example:[/b]
+				[codeblock]
+				var enabled: bool = false
+
+				func _process(_delta):
+				    enabled = imgui.checkbox("Enable feature", enabled)
+				    if enabled:
+				        imgui.text("Feature is enabled!")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="end">
+			<return type="void" />
+			<description>
+				End the current ImGui window. Must be called after [method begin].
+				[b]Note:[/b] Always call [method end] even if [method begin] returned [code]false[/code].
+			</description>
+		</method>
+		<method name="end_frame">
+			<return type="void" />
+			<description>
+				Manually end the current ImGui frame and queue rendering. Only needed if you want manual frame control.
+			</description>
+		</method>
+		<method name="get_cursor_pos">
+			<return type="Vector2" />
+			<description>
+				Get the current cursor position relative to the window. Returns cursor position in pixels.
+			</description>
+		</method>
+		<method name="indent">
+			<return type="void" />
+			<param index="0" name="indent_w" type="float" default="0.0" />
+			<description>
+				Increase indentation for subsequent widgets. Pass 0 for default indentation width.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text("Normal")
+				imgui.indent()
+				imgui.text("Indented")
+				imgui.unindent()
+				[/codeblock]
+			</description>
+		</method>
+		<method name="input_float">
+			<return type="float" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="float" />
+			<description>
+				Display a float input field. Returns the new value.
+				[b]Example:[/b]
+				[codeblock]
+				var speed: float = 10.0
+
+				func _process(_delta):
+				    speed = imgui.input_float("Speed", speed)
+				[/codeblock]
+			</description>
+		</method>
+		<method name="input_int">
+			<return type="int" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="int" />
+			<description>
+				Display an integer input field. Returns the new value.
+				[b]Example:[/b]
+				[codeblock]
+				var count: int = 0
+
+				func _process(_delta):
+				    count = imgui.input_int("Count", count)
+				[/codeblock]
+			</description>
+		</method>
+		<method name="input_text">
+			<return type="String" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="text" type="String" />
+			<param index="2" name="max_length" type="int" default="256" />
+			<description>
+				Display a text input field. Returns the new text.
+				[b]Example:[/b]
+				[codeblock]
+				var player_name: String = "Player"
+
+				func _process(_delta):
+				    player_name = imgui.input_text("Name", player_name)
+				[/codeblock]
+			</description>
+		</method>
+		<method name="label_text">
+			<return type="void" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="text" type="String" />
+			<description>
+				Display a label and value pair (label aligned left, value aligned right).
+				[b]Example:[/b]
+				[codeblock]
+				imgui.label_text("Name", "Player")
+				imgui.label_text("Health", str(player_health))
+				[/codeblock]
+			</description>
+		</method>
+		<method name="new_line">
+			<return type="void" />
+			<description>
+				Force a new line (undo [method same_line]).
+			</description>
+		</method>
+		<method name="pop_id">
+			<return type="void" />
+			<description>
+				Pop an identifier from the ID stack. Must match previous [method push_id] calls.
+			</description>
+		</method>
+		<method name="pop_style_color">
+			<return type="void" />
+			<param index="0" name="count" type="int" default="1" />
+			<description>
+				Pop custom colors from the style stack. Specify how many colors to pop (default: 1).
+			</description>
+		</method>
+		<method name="push_id">
+			<return type="void" />
+			<param index="0" name="id" type="String" />
+			<description>
+				Push an identifier onto the ID stack. Useful for creating unique widgets in loops.
+				[b]Example:[/b]
+				[codeblock]
+				for i in range(5):
+				    imgui.push_id("item_" + str(i))
+				    if imgui.button("Delete"):
+				        print("Delete item ", i)
+				    imgui.pop_id()
+				[/codeblock]
+			</description>
+		</method>
+		<method name="push_style_color">
+			<return type="void" />
+			<param index="0" name="idx" type="int" />
+			<param index="1" name="color" type="Color" />
+			<description>
+				Push a custom color onto the style stack. Common color indices: 0 = Text, 7 = WindowBg, 21 = Button, 22 = ButtonHovered, 23 = ButtonActive. See ImGui documentation for complete list.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.push_style_color(21, Color.RED)  # Red button
+				imgui.button("Danger")
+				imgui.pop_style_color()
+				[/codeblock]
+			</description>
+		</method>
+		<method name="radio_button">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="active" type="bool" />
+			<description>
+				Display a radio button. Returns [code]true[/code] if selected.
+				[b]Example:[/b]
+				[codeblock]
+				var selection: int = 0
+
+				func _process(_delta):
+				    if imgui.radio_button("Option A", selection == 0):
+				        selection = 0
+				    if imgui.radio_button("Option B", selection == 1):
+				        selection = 1
+				[/codeblock]
+			</description>
+		</method>
+		<method name="same_line">
+			<return type="void" />
+			<param index="0" name="offset_from_start_x" type="float" default="0.0" />
+			<param index="1" name="spacing" type="float" default="-1.0" />
+			<description>
+				Continue on the same line instead of starting a new line. Useful for horizontal layouts.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text("Label:")
+				imgui.same_line()
+				imgui.button("Button")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="selectable">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="selected" type="bool" default="false" />
+			<description>
+				Display a selectable item. Returns [code]true[/code] if clicked.
+				[b]Example:[/b]
+				[codeblock]
+				var items = ["Item 1", "Item 2", "Item 3"]
+				var selected_idx = 0
+
+				func _process(_delta):
+				    for i in range(items.size()):
+				        if imgui.selectable(items[i], i == selected_idx):
+				            selected_idx = i
+				[/codeblock]
+			</description>
+		</method>
+		<method name="separator">
+			<return type="void" />
+			<description>
+				Display a horizontal separator line.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text("Section 1")
+				imgui.separator()
+				imgui.text("Section 2")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="set_cursor_pos">
+			<return type="void" />
+			<param index="0" name="pos" type="Vector2" />
+			<description>
+				Set the cursor position for custom layouts.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.set_cursor_pos(Vector2(100, 50))
+				imgui.text("Text at specific position")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="slider_float">
+			<return type="float" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="float" />
+			<param index="2" name="min_value" type="float" />
+			<param index="3" name="max_value" type="float" />
+			<description>
+				Display a float slider. Returns the new value.
+				[b]Example:[/b]
+				[codeblock]
+				var volume: float = 0.5
+
+				func _process(_delta):
+				    volume = imgui.slider_float("Volume", volume, 0.0, 1.0)
+				[/codeblock]
+			</description>
+		</method>
+		<method name="slider_int">
+			<return type="int" />
+			<param index="0" name="label" type="String" />
+			<param index="1" name="value" type="int" />
+			<param index="2" name="min_value" type="int" />
+			<param index="3" name="max_value" type="int" />
+			<description>
+				Display an integer slider. Returns the new value.
+				[b]Example:[/b]
+				[codeblock]
+				var level: int = 1
+
+				func _process(_delta):
+				    level = imgui.slider_int("Level", level, 1, 100)
+				[/codeblock]
+			</description>
+		</method>
+		<method name="small_button">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<description>
+				Display a small button without a frame. Returns [code]true[/code] when clicked.
+				[b]Example:[/b]
+				[codeblock]
+				if imgui.small_button("×"):
+				    print("Close button clicked")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="spacing">
+			<return type="void" />
+			<description>
+				Add vertical spacing between widgets.
+			</description>
+		</method>
+		<method name="text">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Display plain text.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text("Hello, World!")
+				imgui.text("FPS: " + str(Engine.get_frames_per_second()))
+				[/codeblock]
+			</description>
+		</method>
+		<method name="text_colored">
+			<return type="void" />
+			<param index="0" name="color" type="Color" />
+			<param index="1" name="text" type="String" />
+			<description>
+				Display colored text.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text_colored(Color.RED, "Error: Invalid input")
+				imgui.text_colored(Color(1, 0.5, 0), "Warning message")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="text_disabled">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Display grayed-out text with disabled styling.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text_disabled("This feature is not available")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="text_wrapped">
+			<return type="void" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Display text with automatic word wrapping at the edge of the window.
+				[b]Example:[/b]
+				[codeblock]
+				imgui.text_wrapped("This is a very long text that will automatically wrap.")
+				[/codeblock]
+			</description>
+		</method>
+		<method name="tree_node">
+			<return type="bool" />
+			<param index="0" name="label" type="String" />
+			<description>
+				Create a collapsible tree node. Returns [code]true[/code] if expanded.
+				[b]Important:[/b] Must call [method tree_pop] if this returns [code]true[/code].
+				[b]Example:[/b]
+				[codeblock]
+				if imgui.tree_node("Settings"):
+				    imgui.text("Option 1")
+				    imgui.text("Option 2")
+				    imgui.tree_pop()
+				[/codeblock]
+			</description>
+		</method>
+		<method name="tree_pop">
+			<return type="void" />
+			<description>
+				End the current tree node. Must be called after [method tree_node] returns [code]true[/code].
+			</description>
+		</method>
+		<method name="unindent">
+			<return type="void" />
+			<param index="0" name="indent_w" type="float" default="0.0" />
+			<description>
+				Decrease indentation. Should match previous [method indent] calls.
+			</description>
+		</method>
+	</methods>
+</class>
