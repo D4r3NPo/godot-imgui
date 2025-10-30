@@ -94,7 +94,43 @@ jobs:
     runs-on: ubuntu-22.04
     needs: build
     steps:
-      - name: Merge Artifacts
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: godot-imgui-*
+          path: artifacts
+
+      - name: Create addons folder structure
+        shell: bash
+        run: |
+          # Create the addons/godot-imgui directory structure
+          mkdir -p addons/godot-imgui
+
+          # Copy the .gdextension file
+          cp demo/bin/godot-imgui.gdextension addons/godot-imgui/
+
+          # Create platform directories and copy binaries
+          for artifact_dir in artifacts/godot-imgui-*; do
+            if [ -d "$artifact_dir" ]; then
+              # Copy all files from the artifact, preserving directory structure
+              cp -r "$artifact_dir"/* addons/godot-imgui/
+            fi
+          done
+
+          # Display the structure for verification
+          echo "Addons folder structure:"
+          ls -R addons/
+
+      - name: Upload addons artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-imgui-addon
+          path: addons/
+
+      - name: Merge raw binaries artifact
         uses: actions/upload-artifact/merge@v4
         with:
           name: godot-imgui
