@@ -1,5 +1,8 @@
 name: Create Release
 on:
+  push:
+    tags:
+      - "v*" # i.e. v1.0, v20.15.10
   workflow_dispatch:
     inputs:
       version:
@@ -13,19 +16,27 @@ on:
         default: false
 
 jobs:
-  # First, build all platforms
   build:
     uses: ./.github/workflows/builds.yml
 
-  # Create and upload the release
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: build
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
       - name: Download addon artifact
         uses: actions/download-artifact@v4
@@ -70,20 +81,3 @@ jobs:
             godot-imgui-addon.zip
             godot-imgui-binaries.zip
           body: |
-            ## Installation
-
-            ### For Godot Projects (Recommended)
-            1. Download `godot-imgui-addon.zip`
-            2. Extract the `addons` folder
-            3. Copy the `addons/godot-imgui` folder into your Godot project's `addons` directory
-            4. Restart Godot or reload your project
-
-            ### For Development
-            If you need just the binaries, download `godot-imgui-binaries.zip` which contains the raw compiled libraries for all platforms.
-
-            ## Platforms Supported
-            - Windows (x86_64)
-            - Linux (x86_64)
-            - macOS (Universal)
-            - Android (ARM64)
-            - iOS (ARM64)
